@@ -16,6 +16,10 @@ router.get('/signup', authController.showSignupPage);
 // Handle signup logic
 router.post('/signup', authController.signup);
 
+router.get('/changepassword', authController.showChangePasswordPage);
+router.post('/changepassword', authController.changePassword);
+
+
 // Logout
 router.get('/logout', authController.logout);
 

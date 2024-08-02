@@ -4,12 +4,13 @@
   "description": "��#\u0000 \u0000o\u0000l\u0000e\u0000a\u0000\r\u0000 \u0000",
   "main": "server.js",
   "scripts": {
-    "start": "npm run watch:css && react-scripts start",
+    "start": "npm run create-db && npm run watch:css &&  react-scripts start",
     "build": "npm run watch:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "build:css": "postcss src/assets/tailwind.css -o public/stylesheets/output.css",
-    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css"
+    "watch:css": "postcss src/assets/tailwind.css -o src/assets/main.css",
+    "create-db": "node scripts/create_database.js"
   },
   "keywords": [],
   "author": "",

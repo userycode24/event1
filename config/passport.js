@@ -1,19 +1,14 @@
-// config/passport.js
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-const pool = require('./database'); // Adjust the path as necessary
+const pool = require('./database');
 
 module.exports = function(passport) {
-  // =========================================================================
-  // passport session setup ==================================================
-  // =========================================================================
-
   passport.serializeUser((user, done) => {
-    if (!user.id) {
-      return done(new Error('User ID is missing'));
-    }
+    // if (!user.id) {
+    //   return done(new Error('User ID is missing'));
+    // }
     done(null, user.id);
-    console.log(user.id);
+    // console.log(user.id); // Consider removing or replacing with a logger
   });
 
   passport.deserializeUser(async (id, done) => {
@@ -25,19 +20,15 @@ module.exports = function(passport) {
     }
   });
 
-  // =========================================================================
-  // LOCAL SIGNUP ============================================================
-  // =========================================================================
-
   passport.use('local-signup', new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
-    passReqToCallback: true // allows us to pass back the entire request to the callback
+    passReqToCallback: true
   }, async (req, username, password, done) => {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
       if (rows.length) {
-        return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
+        return done(null, false, { message: 'That username is already taken.' });
       } else {
         const hash = await bcrypt.hash(password, 10);
         const newUser = { username, password: hash };
@@ -50,10 +41,6 @@ module.exports = function(passport) {
     }
   }));
 
-  // =========================================================================
-  // LOCAL LOGIN =============================================================
-  // =========================================================================
-
   passport.use('local-login', new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
@@ -62,8 +49,6 @@ module.exports = function(passport) {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
       if (!rows.length) {
-        req.flash('error_msg', 'No user found.');
-
         return done(null, false, { message: 'No user found.' });
       }
   
@@ -78,6 +63,4 @@ module.exports = function(passport) {
       return done(err);
     }
   }));
-  
-  
 };

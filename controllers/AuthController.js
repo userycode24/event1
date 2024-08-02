@@ -4,79 +4,67 @@ const passport = require('passport');
 const pool = require('../config/database');
 
 module.exports = {
-  // Show login page
   showLoginPage: (req, res) => {
-    res.render('login', {
-      error_msg: req.flash('error_msg')
-    });
+    res.render('login');
   },
 
-  // Handle login
   login: (req, res, next) => {
-
     passport.authenticate('local-login', (err, user, info) => {
-      if (err) {
-        return next(err); // Handle errors properly
-      }
-  
+      if (err) return next(err);
+
       if (!user) {
-        // If user is not found or password is incorrect, redirect with a flash message
-        const errorMsg = info.message  ||'Invalid username or password'; // Fallback message
-        console.log(errorMsg);
+        const errorMsg = info.message;
         req.flash('error_msg', errorMsg);
         return res.redirect('/login');
       }
-  
+
       req.logIn(user, (err) => {
-        if (err) { return next(err); }
-  
-        // Redirect based on user role
+        if (err) return next(err);
+
         if (user.role === 'admin') {
-          return res.redirect('/events'); // Redirect admin to events
+          return res.redirect('/events');
         } else if (req.session.returnTo) {
           const redirectUrl = req.session.returnTo;
           delete req.session.returnTo;
-          return res.redirect(redirectUrl); // Redirect to the originally requested URL
+          return res.redirect(redirectUrl);
         } else {
-          return res.redirect('/'); // Default redirect for regular users
+          return res.redirect('/');
         }
       });
     })(req, res, next);
   },
-  
-  // Show signup page
+
   showSignupPage: (req, res) => {
-    res.render('signup', {
-      error_msg: req.flash('error_msg')
-    });
+    res.render('signup');
   },
 
-  // Handle signup
   signup: (req, res, next) => {
-    passport.authenticate('local-signup', {
-      successRedirect: '/profile',
-      failureRedirect: '/signup',
-      failureFlash: true
+    passport.authenticate('local-signup', (err, user, info) => {
+      if (err) { return next(err); }
+      if (!user) {
+        const errorMsg = info.message;
+        req.flash('error_msg', errorMsg);
+        return res.redirect('/signup');
+      }
+      req.flash('success_msg', 'You have successfully signed up! Please log in.');
+      res.redirect('/login');
     })(req, res, next);
   },
 
-  // Logout
   logout: (req, res) => {
     req.logout();
     req.flash('success_msg', 'You are logged out');
     res.redirect('/');
   },
 
-  // Show change password page (only for admin)
   showChangePasswordPage: (req, res) => {
     if (req.user.role === 'admin') {
-      res.render('change-password'); // Ensure you have a view for this
+      res.render('change-password');
     } else {
-      res.redirect('/'); // Or some other page if the user is not admin
+      res.redirect('/');
     }
   },
 
-  // Handle password change
   changePassword: async (req, res) => {
     if (req.user.role !== 'admin') {
       return res.redirect('/');

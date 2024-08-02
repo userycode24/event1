@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { isAuthenticated, isAdmin } = require('../middleware/auth');
+const { isAuthenticated, isAdmin } = require('../middlewares/auth');
 
 // Route for rendering events, requires admin access
 router.get('/events', isAuthenticated, isAdmin, (req, res) => {

@@ -1,9 +1,11 @@
 
   <h1>Register</h1>
-  <% if (error_msg) { %>
-    <div><%= error_msg %></div>
+  <% if (error_msg.length > 0) { %>
+    <div class="alert alert-danger">
+      <%= error_msg %>
+    </div>
   <% } %>
-  <form action="/register" method="POST">
+  <form action="/signup" method="POST">
     <label for="username">Username:</label>
     <input type="text" name="username" required>
     <label for="password">Password:</label>

@@ -9,6 +9,10 @@ require('./config/passport')(passport);
 
 const app = express();
 
+// Import and run the database creation script
+const createDatabase = require('./scripts/create_database');
+createDatabase();
+
 // Set EJS as the view engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
@@ -29,10 +33,6 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(flash());
-/*app.use((req, res, next) => {
-    res.locals.message = req.flash('message');
-    next();
-  });*/
 
 // Passport middleware
 app.use(passport.initialize());

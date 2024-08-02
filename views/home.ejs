@@ -1,3 +1,9 @@
+<% if (success_msg.length > 0) { %>
+    <div class="alert alert-success" id="success-alert">
+      <%= success_msg %>
+    </div>
+  <% } %>
+            
         <!-- Carousel Start -->
         <div class="container-fluid p-0">
             <div class="owl-carousel header-carousel position-relative">
@@ -635,3 +641,20 @@
 
         <!-- Back to Top -->
         <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+        <script>
+            // Function to remove alert after 5 seconds
+            function autoHideAlert() {
+              const alert = document.getElementById('success-alert');
+              if (alert) {
+                setTimeout(() => {
+                  alert.style.opacity = '0';
+                  setTimeout(() => alert.remove(), 500); // Remove from DOM after fade out
+                }, 5000); // 5 seconds
+              }
+            }
+          
+            // Run the function when the page loads
+            document.addEventListener('DOMContentLoaded', autoHideAlert);
+          </script>
