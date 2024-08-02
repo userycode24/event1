@@ -1,41 +1,22 @@
 // routes/authRoutes.js
 const express = require('express');
 const passport = require('passport');
+const authController = require('../controllers/AuthController'); // Import the AuthController
 const router = express.Router();
 
 // Show login form
-router.get('/login', (req, res) => {
-  res.render('login', {
-    error_msg: req.flash('error_msg') // Pass flash messages to the view
-  });
-});
+router.get('/login', authController.showLoginPage);
 
 // Handle login logic
-router.post('/login', passport.authenticate('local-login', {
-  successRedirect: '/',
-  failureRedirect: '/login',
-  failureFlash: true // Ensure flash messages are enabled
-}));
+router.post('/login', authController.login);
 
 // Show signup form
-router.get('/signup', (req, res) => {
-  res.render('signup', {
-    error_msg: req.flash('error_msg') // Pass flash messages to the view
-  });
-});
+router.get('/signup', authController.showSignupPage);
 
 // Handle signup logic
-router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/',
-  failureRedirect: '/signup',
-  failureFlash: true
-}));
+router.post('/signup', authController.signup);
 
 // Logout
-router.get('/logout', (req, res) => {
-  req.logout();
-  req.flash('success_msg', 'You are logged out');
-  res.redirect('/');
-});
+router.get('/logout', authController.logout);
 
 module.exports = router;

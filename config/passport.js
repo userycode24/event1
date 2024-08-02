@@ -9,7 +9,11 @@ module.exports = function(passport) {
   // =========================================================================
 
   passport.serializeUser((user, done) => {
+    if (!user.id) {
+      return done(new Error('User ID is missing'));
+    }
     done(null, user.id);
+    console.log(user.id);
   });
 
   passport.deserializeUser(async (id, done) => {
@@ -53,23 +57,27 @@ module.exports = function(passport) {
   passport.use('local-login', new LocalStrategy({
     usernameField: 'username',
     passwordField: 'password',
-    passReqToCallback: true // allows us to pass back the entire request to the callback
+    passReqToCallback: true
   }, async (req, username, password, done) => {
     try {
       const [rows] = await pool.query("SELECT * FROM users WHERE username = ?", [username]);
       if (!rows.length) {
-        return done(null, false, req.flash('loginMessage', 'No user found.'));
-      }
+        req.flash('error_msg', 'No user found.');
 
+        return done(null, false, { message: 'No user found.' });
+      }
+  
       const user = rows[0];
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+        return done(null, false, { message: 'Oops! Wrong password.' });
       }
-
+  
       return done(null, user);
     } catch (err) {
       return done(err);
     }
   }));
+  
+  
 };

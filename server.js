@@ -28,13 +28,17 @@ app.use(session({
   resave: false,
   saveUninitialized: true
 }));
+app.use(flash());
+/*app.use((req, res, next) => {
+    res.locals.message = req.flash('message');
+    next();
+  });*/
 
 // Passport middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Connect flash
-app.use(flash());
 
 // Global variables for flash messages
 app.use((req, res, next) => {

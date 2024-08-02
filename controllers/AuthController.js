@@ -13,22 +13,26 @@ module.exports = {
 
   // Handle login
   login: (req, res, next) => {
-    console.log("inside login funct")
+
     passport.authenticate('local-login', (err, user, info) => {
-      if (err) { 
-        console.log("inside login funct err")
-
-        req.flash('error_msg', 'Invalid username or password');
-        return res.redirect('/login'); 
-       }
-     
-
+      if (err) {
+        return next(err); // Handle errors properly
+      }
+  
+      if (!user) {
+        // If user is not found or password is incorrect, redirect with a flash message
+        const errorMsg = info.message  ||'Invalid username or password'; // Fallback message
+        console.log(errorMsg);
+        req.flash('error_msg', errorMsg);
+        return res.redirect('/login');
+      }
+  
       req.logIn(user, (err) => {
         if (err) { return next(err); }
-
+  
         // Redirect based on user role
         if (user.role === 'admin') {
-          return res.redirect('/manage-agenda'); // Redirect admin to manage-agenda
+          return res.redirect('/events'); // Redirect admin to events
         } else if (req.session.returnTo) {
           const redirectUrl = req.session.returnTo;
           delete req.session.returnTo;
@@ -39,7 +43,7 @@ module.exports = {
       });
     })(req, res, next);
   },
-
+  
   // Show signup page
   showSignupPage: (req, res) => {
     res.render('signup', {
