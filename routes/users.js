@@ -1,19 +1,41 @@
-// routes/users.js
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
-const pool = require('../config/database'); // Adjust the path as necessary
+const passport = require('passport');
+const pool = require('../config/database');
 
-router.post('/signup', async (req, res, next) => {
-  const { username, password } = req.body;
+// Route for registration page
+router.get('/register', (req, res) => {
+  res.render('register');
+});
 
-  try {
-    const hash = await bcrypt.hash(password, 10);
-    await pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hash]);
-    res.redirect('/login');
-  } catch (err) {
-    next(err);
-  }
+// Route for handling registration form submission
+router.post('/register', (req, res, next) => {
+  passport.authenticate('local-signup', {
+    successRedirect: '/',
+    failureRedirect: '/register',
+    failureFlash: true
+  })(req, res, next);
+});
+
+// Route for login page
+router.get('/login', (req, res) => {
+  res.render('login');
+});
+
+// Route for handling login form submission
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local-login', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: true
+  })(req, res, next);
+});
+
+// Route for logout
+router.get('/logout', (req, res) => {
+  req.logout();
+  req.flash('success_msg', 'You are logged out');
+  res.redirect('/');
 });
 
 module.exports = router;
