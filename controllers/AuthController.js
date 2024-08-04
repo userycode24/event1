@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
 
 module.exports = {
   showLoginPage: (req, res) => {

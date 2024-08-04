@@ -1,4 +1,6 @@
 const { body, validationResult } = require("express-validator");
+const path = require("path");
+const fs = require("fs").promises;
 const Event = require("../models/Event");
 
 // Show all events page
@@ -12,20 +14,29 @@ module.exports.showEventsPage = async (req, res) => {
     res.redirect("/");
   }
 };
+
 // Show home page
 module.exports.showHomePage = async (req, res) => {
   try {
+    // Fetch events data
     const events = await Event.getAllEvents();
-    res.render("home", { events });
+
+    // Fetch news data from the JSON file
+    const newsFilePath = path.join(__dirname, "../data/news.json"); // Adjust the path if needed
+    const newsData = await fs.readFile(newsFilePath, "utf8");
+    const newsArray = JSON.parse(newsData);
+    console.log(newsArray);
+
+    // Render the home page with both events and news data
+    res.render("home", { events, news: newsArray });
   } catch (err) {
-    console.error("Error fetching events:", err);
-    req.flash("error_msg", "Error fetching events.");
+    console.error("Error fetching events or news:", err);
+    req.flash("error_msg", "Error fetching events or news.");
     res.redirect("/");
   }
 };
 
 // Show specific event page
-// controllers/EventController.js
 module.exports.showEventPage = async (req, res) => {
   const { id } = req.params; // Use req.params for route parameters
   try {
@@ -45,11 +56,12 @@ module.exports.showEventPage = async (req, res) => {
 
 // Add a new event
 module.exports.addEvent = [
-  body("title")
+  body("titre")
     .isLength({ min: 3 })
     .withMessage("Title must be at least 3 characters long")
     .trim()
     .escape(),
+  body("apercu").optional().trim().escape(),
   body("description")
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long")
@@ -57,13 +69,14 @@ module.exports.addEvent = [
     .escape(),
   body("date").isISO8601().withMessage("Date must be a valid ISO date"),
   body("time").isISO8601().withMessage("Time must be a valid ISO time"),
-  body("location").optional().trim().escape(),
+  body("lieu").optional().trim().escape(),
   body("plan")
     .optional()
     .isJSON()
     .withMessage("Plan must be a valid JSON format"),
-  body("participation_details").optional().trim().escape(),
-  body("additional_info").optional().trim().escape(),
+  body("observations").optional().trim().escape(),
+  body("participation").optional().trim().escape(),
+  body("info_add").optional().trim().escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -76,27 +89,32 @@ module.exports.addEvent = [
     }
 
     const {
-      title,
+      titre,
+      apercu,
       description,
-      imageUrl,
+      image_url,
       date,
       time,
-      location,
+      lieu,
       plan,
-      participation_details,
-      additional_info,
+      observations,
+      participation,
+      info_add,
     } = req.body;
+
     try {
       await Event.addEvent(
-        title,
+        titre,
+        apercu,
         description,
-        imageUrl,
+        image_url,
         date,
         time,
-        location,
+        lieu,
         plan,
-        participation_details,
-        additional_info
+        observations,
+        participation,
+        info_add
       );
       req.flash("success_msg", "Event added successfully.");
       res.redirect("/events");
@@ -111,11 +129,12 @@ module.exports.addEvent = [
 // Update an existing event
 module.exports.updateEvent = [
   body("id").isInt().withMessage("Event ID must be a number"),
-  body("title")
+  body("titre")
     .isLength({ min: 3 })
     .withMessage("Title must be at least 3 characters long")
     .trim()
     .escape(),
+  body("apercu").optional().trim().escape(),
   body("description")
     .isLength({ min: 10 })
     .withMessage("Description must be at least 10 characters long")
@@ -123,13 +142,14 @@ module.exports.updateEvent = [
     .escape(),
   body("date").isISO8601().withMessage("Date must be a valid ISO date"),
   body("time").isISO8601().withMessage("Time must be a valid ISO time"),
-  body("location").optional().trim().escape(),
+  body("lieu").optional().trim().escape(),
   body("plan")
     .optional()
     .isJSON()
     .withMessage("Plan must be a valid JSON format"),
-  body("participation_details").optional().trim().escape(),
-  body("additional_info").optional().trim().escape(),
+  body("observations").optional().trim().escape(),
+  body("participation").optional().trim().escape(),
+  body("info_add").optional().trim().escape(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -143,28 +163,33 @@ module.exports.updateEvent = [
 
     const {
       id,
-      title,
+      titre,
+      apercu,
       description,
-      imageUrl,
+      image_url,
       date,
       time,
-      location,
+      lieu,
       plan,
-      participation_details,
-      additional_info,
+      observations,
+      participation,
+      info_add,
     } = req.body;
+
     try {
       await Event.updateEvent(
         id,
-        title,
+        titre,
+        apercu,
         description,
-        imageUrl,
+        image_url,
         date,
         time,
-        location,
+        lieu,
         plan,
-        participation_details,
-        additional_info
+        observations,
+        participation,
+        info_add
       );
       req.flash("success_msg", "Event updated successfully.");
       res.redirect("/events");

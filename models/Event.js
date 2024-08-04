@@ -4,12 +4,7 @@ class Event {
   static async getAllEvents() {
     try {
       const [rows] = await pool.query("SELECT * FROM Evenements");
-      return rows.map((row) => {
-        return {
-          ...row,
-          plan: JSON.parse(row.plan),
-        };
-      });
+      return rows;
     } catch (err) {
       throw new Error("An error occurred while fetching events.");
     }
@@ -21,10 +16,7 @@ class Event {
         id,
       ]);
       if (rows.length > 0) {
-        return {
-          ...rows[0],
-          plan: JSON.parse(rows[0].plan),
-        };
+        return rows[0];
       } else {
         throw new Error("Event not found.");
       }
@@ -32,30 +24,37 @@ class Event {
       throw new Error("An error occurred while fetching the event.");
     }
   }
+
   static async addEvent(
     titre,
+    apercu,
     description,
     image_url,
-    date,
+    date_debut,
+    date_fin,
     time,
     lieu,
     plan,
-    participation_details,
-    additional_info
+    observations,
+    participation,
+    info_add
   ) {
     try {
       await pool.query(
-        "INSERT INTO Evenements (titre, description, image_url, date, lieu,plan, participation_details, additional_info) VALUES (?, ?, ?, ?, ?,?,?,?)",
+        "INSERT INTO Evenements (titre, apercu, description, image_url, date_debut, date_fin, time, lieu, plan, observations, participation, info_add) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           titre,
+          apercu,
           description,
           image_url,
-          date,
+          date_debut,
+          date_fin,
           time,
           lieu,
-          plan,
-          participation_details,
-          additional_info,
+          plan ? JSON.stringify(plan) : null,
+          observations,
+          participation,
+          info_add,
         ]
       );
     } catch (err) {
@@ -66,27 +65,34 @@ class Event {
   static async updateEvent(
     id,
     titre,
+    apercu,
     description,
     image_url,
-    date,
+    date_debut,
+    date_fin,
     time,
     lieu,
     plan,
-    participation_details,
-    additional_info
+    observations,
+    participation,
+    info_add
   ) {
     try {
       await pool.query(
-        "UPDATE Evenements SET titre = ?, description = ?, image_url = ?, date = ?, time = ?, lieu = ?,plan = ?, participation_details = ?, additional_info = ? WHERE id = ?",
+        "UPDATE Evenements SET titre = ?, apercu = ?, description = ?, image_url = ?, date_debut = ?, date_fin = ?, time = ?, lieu = ?, plan = ?, observations = ?, participation = ?, info_add = ? WHERE id = ?",
         [
           titre,
+          apercu,
           description,
           image_url,
-          date,
+          date_debut,
+          date_fin,
+          time,
           lieu,
-          plan,
-          participation_details,
-          additional_info,
+          plan ? JSON.stringify(plan) : null,
+          observations,
+          participation,
+          info_add,
           id,
         ]
       );

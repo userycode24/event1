@@ -6,11 +6,27 @@
     </h1>
   </div>
 </div>
+<style>
+  .page-header {
+    background: linear-gradient(rgba(43, 57, 64, 0.5), rgba(43, 57, 64, 0.5)),
+      url(<%=event.image_url%>) center center no-repeat;
+    background-size: contain;
+  }
+</style>
 <!-- Header End -->
 
 <!-- Job Detail Start -->
 <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
   <div class="container">
+    <!-- Countdown Section Start -->
+    <div id="countdown" class="mb-4">
+      <div id="countdown-timer">
+        <span id="message"></span>
+        <span id="days"></span> Days <span id="hours"></span> Hours
+        <span id="minutes"></span> Minutes <span id="seconds"></span> Seconds
+      </div>
+    </div>
+    <!-- Countdown Section End -->
     <div class="row gy-5 gx-4">
       <div class="col-lg-8">
         <div class="d-flex align-items-center mb-5">
@@ -32,74 +48,23 @@
             >
             <span class="text-truncate me-0"
               ><i class="far fa-calendar-alt text-primary me-2"></i
-              ><%=event.date.toDateString()%></span
+              ><%=event.date_debut.toDateString()%></span
             >
           </div>
         </div>
 
         <div class="mb-5">
-          <h4 class="mb-3">Description</h4>
+          <h4 class="mb-3">resume</h4>
+          <p><%=event.apercu%></p>
+          <h4 class="mb-3">Apercu</h4>
           <p><%=event.description%></p>
-          <h4 class="mb-3">Responsibility</h4>
-          <p>
-            Magna et elitr diam sed lorem. Diam diam stet erat no est est.
-            Accusam sed lorem stet voluptua sit sit at stet consetetur, takimata
-            at diam kasd gubergren elitr dolor
-          </p>
-          <ul class="list-unstyled">
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Dolor justo
-              tempor duo ipsum accusam
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Elitr stet
-              dolor vero clita labore gubergren
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Rebum vero
-              dolores dolores elitr
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Est voluptua et
-              sanctus at sanctus erat
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Diam diam stet
-              erat no est est
-            </li>
-          </ul>
-          <h4 class="mb-3">Qualifications</h4>
-          <p>
-            Magna et elitr diam sed lorem. Diam diam stet erat no est est.
-            Accusam sed lorem stet voluptua sit sit at stet consetetur, takimata
-            at diam kasd gubergren elitr dolor
-          </p>
-          <ul class="list-unstyled">
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Dolor justo
-              tempor duo ipsum accusam
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Elitr stet
-              dolor vero clita labore gubergren
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Rebum vero
-              dolores dolores elitr
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Est voluptua et
-              sanctus at sanctus erat
-            </li>
-            <li>
-              <i class="fa fa-angle-right text-primary me-2"></i>Diam diam stet
-              erat no est est
-            </li>
-          </ul>
+
+          <h4 class="mb-3">Information additionnel</h4>
+          <p><%=event.info_add%></p>
         </div>
 
         <div class="">
-          <h4 class="mb-4">Apply For The Job</h4>
+          <h4 class="mb-4">Participer dans cet evenement</h4>
           <form>
             <div class="row g-3">
               <div class="col-12 col-sm-6">
@@ -135,7 +100,7 @@
               </div>
               <div class="col-12">
                 <button class="btn btn-primary w-100" type="submit">
-                  Apply Now
+                  Participer
                 </button>
               </div>
             </div>
@@ -158,7 +123,7 @@
         </div>
         <div class="bg-light rounded p-5 wow slideInUp" data-wow-delay="0.1s">
           <h4 class="mb-4">Observations</h4>
-          <p class="m-0"><%=event.participation_details%></p>
+          <p class="m-0"><%=event.observations%></p>
         </div>
       </div>
     </div>
@@ -259,3 +224,57 @@
 <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"
   ><i class="bi bi-arrow-up"></i
 ></a>
+
+<script>
+  // Get the event's start and end dates from EJS
+  const dateDebut = new Date("<%= event.date_debut.toISOString() %>");
+  const dateFin = new Date("<%= event.date_fin.toISOString() %>");
+
+  function updateCountdown() {
+    const now = new Date();
+    let message = "";
+    let timeRemaining = 0;
+    let textColor = "";
+
+    if (now < dateDebut) {
+      // Event has not started yet
+      message = "Days until event starts: ";
+      timeRemaining = dateDebut - now;
+      textColor = "black"; // Default color
+    } else if (now >= dateDebut && now <= dateFin) {
+      // Event is currently ongoing
+      message = "Time until event finishes: ";
+      timeRemaining = dateFin - now;
+      textColor = "green"; // Color for ongoing event
+    } else {
+      // Event has finished
+      message = "Événement fini";
+      textColor = "red"; // Color for finished event
+      document.getElementById("countdown-timer").innerHTML = message;
+      return;
+    }
+
+    // Calculate time components
+    const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+    );
+    const minutes = Math.floor(
+      (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+    );
+    const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+    // Update the countdown display
+    document.getElementById("message").innerText = message;
+    document.getElementById("days").innerText = days;
+    document.getElementById("hours").innerText = hours;
+    document.getElementById("minutes").innerText = minutes;
+    document.getElementById("seconds").innerText = seconds;
+
+    // Apply text color
+    document.getElementById("countdown-timer").style.color = textColor;
+  }
+
+  // Update the countdown every second
+  setInterval(updateCountdown, 1000);
+</script>

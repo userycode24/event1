@@ -1,35 +1,52 @@
-<h1>Register</h1>
 <% if (error_msg.length > 0) { %>
 <div class="alert alert-danger"><%= error_msg %></div>
 <% } %>
-<form action="/signup" method="POST" class="signup-form">
-  <div>
-    <label for="username">Username:</label>
-    <input type="text" name="username" required />
-  </div>
-  <div>
-    <label for="email">email:</label>
-    <input type="email" name="email" required />
-  </div>
-  <div>
-    <label for="nom">nom:</label>
-    <input type="text" name="nom" required />
-  </div>
-  <div>
-    <label for="prenom">prenom:</label>
-    <input type="text" name="prenom" required />
-  </div>
-  <div>
-    <label for="password">Password:</label>
-    <input type="password" name="password" required />
-  </div>
-  <button type="submit">Register</button>
-</form>
-<a href="/login">Already have an account? Login</a>
-<style>
-  .signup-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-</style>
+<div class="login_form">
+  <form action="/signup" method="POST" class="signup-form">
+    <div class="input_box">
+      <label for="username">Username:</label>
+      <input type="text" name="username" required />
+    </div>
+    <div class="input_box">
+      <label for="email">email:</label>
+      <input type="email" name="email" required />
+    </div>
+    <div class="input_box">
+      <label for="nom">nom:</label>
+      <input type="text" name="nom" required />
+    </div>
+    <div class="input_box">
+      <label for="prenom">prenom:</label>
+      <input type="text" name="prenom" required />
+    </div>
+    <div class="input_box">
+      <label for="password">Mot de pass:</label>
+      <input type="password" name="password" id="password" required />
+    </div>
+    <div class="input_box">
+      <label for="password_confirmation">Confirmer le mot de pass:</label>
+      <input
+        type="password"
+        name="password_confirmation"
+        id="password_confirmation"
+        required
+      />
+    </div>
+    <button type="submit">Register</button>
+  </form>
+  <a href="/login">Already have an account? Login</a>
+</div>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function (event) {
+    const password = document.querySelector("#password").value;
+    const passwordConfirmation = document.querySelector(
+      "#password_confirmation"
+    ).value;
+
+    if (password !== passwordConfirmation) {
+      alert("Passwords do not match.");
+      event.preventDefault(); // Prevent form submission
+    }
+  });
+</script>
