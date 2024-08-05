@@ -125,5 +125,23 @@
 
     <!-- Template Javascript -->
     <script src="/js/main.js"></script>
+    <script>
+      function setActiveLink() {
+        const navLinks = document.querySelectorAll(".nav-link");
+        const currentUrl = window.location.pathname;
+
+        navLinks.forEach((link) => {
+          // Check if the link's href matches the current URL
+          if (link.getAttribute("href") === currentUrl) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+      }
+
+      // Call setActiveLink when the page loads
+      document.addEventListener("DOMContentLoaded", setActiveLink);
+    </script>
   </body>
 </html>

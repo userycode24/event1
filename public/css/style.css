@@ -5,6 +5,9 @@
   --light: #effdf5;
   --dark: #2b3940;
 }
+a {
+  text-decoration: none !important;
+}
 
 .back-to-top {
   position: fixed;
@@ -229,7 +232,7 @@
 
 .page-header {
   background: linear-gradient(rgba(43, 57, 64, 0.5), rgba(43, 57, 64, 0.5)),
-    url(../img/carousel-1.jpg) center center no-repeat;
+    url(../img/event6.jpg) center center no-repeat;
   background-size: cover;
 }
 
@@ -311,6 +314,24 @@
 .testimonial-carousel .owl-item .testimonial-item,
 .testimonial-carousel .owl-item.center .testimonial-item * {
   transition: 0.5s;
+}
+
+.testimonial-item {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  height: 330px;
+}
+.testimonial-item h5 {
+  font-size: 16px;
+}
+.testimonial-item p {
+  font-size: 14px;
+}
+
+.testimonial-item img {
+  width: 100% !important;
+  height: auto !important;
 }
 
 .testimonial-carousel .owl-item.center .testimonial-item {

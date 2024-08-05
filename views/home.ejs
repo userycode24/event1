@@ -35,108 +35,31 @@
     <% }); %> <% } %>
   </div>
 </div>
-<!-- news Start -->
-<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
-  <div class="container">
-    <h1 class="text-center mb-5">Actualités</h1>
-    <div class="owl-carousel testimonial-carousel">
-      <% if (news.length > 0) { %> <% news.forEach(item => { %>
-      <div class="testimonial-item bg-light rounded p-4">
-        <h5 class="mb-1"><%= item.title %></h5>
-        <p><%= item.description %></p>
-        <div class="d-flex align-items-center">
-          <img
-            class="img-fluid flex-shrink-0 rounded"
-            src="<%= item.imageUrl %>"
-            style="width: 50px; height: 50px"
-          />
-          <div class="ps-3">
-            <small><%= item.date %></small>
-          </div>
-        </div>
-      </div>
-      <% }); %> <% } %>
 
-      <!-- <div class="testimonial-item bg-light rounded p-4">
-        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-        <p>
-          Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet
-          amet eirmod eos labore diam
-        </p>
-        <div class="d-flex align-items-center">
-          <img
-            class="img-fluid flex-shrink-0 rounded"
-            src="img/testimonial-2.jpg"
-            style="width: 50px; height: 50px"
-          />
-          <div class="ps-3">
-            <h5 class="mb-1">Client Name</h5>
-            <small>Profession</small>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-item bg-light rounded p-4">
-        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-        <p>
-          Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet
-          amet eirmod eos labore diam
-        </p>
-        <div class="d-flex align-items-center">
-          <img
-            class="img-fluid flex-shrink-0 rounded"
-            src="img/testimonial-3.jpg"
-            style="width: 50px; height: 50px"
-          />
-          <div class="ps-3">
-            <h5 class="mb-1">Client Name</h5>
-            <small>Profession</small>
-          </div>
-        </div>
-      </div>
-      <div class="testimonial-item bg-light rounded p-4">
-        <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-        <p>
-          Dolor et eos labore, stet justo sed est sed. Diam sed sed dolor stet
-          amet eirmod eos labore diam
-        </p>
-        <div class="d-flex align-items-center">
-          <img
-            class="img-fluid flex-shrink-0 rounded"
-            src="img/testimonial-4.jpg"
-            style="width: 50px; height: 50px"
-          />
-          <div class="ps-3">
-            <h5 class="mb-1">Client Name</h5>
-            <small>Profession</small>
-          </div>
-        </div>
-      </div> -->
-    </div>
-  </div>
-</div>
-<!-- news End -->
 <!-- Category Start -->
 <div class="container-xxl py-5">
   <div class="container">
-    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">
-      Explore By Category
-    </h1>
+    <h1 class="text-center mb-5 wow fadeInUp" data-wow-delay="0.1s">Apercu</h1>
+    <p style="text-align: center">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima tempora
+      cum aspernatur commodi iste ipsum, repudiandae amet quidem est. Recusandae
+      veniam alias inventore. Voluptas officia iste ea, error saepe ratione.
+    </p>
     <div class="row g-4">
+      <% if (events.length > 0) { %> <% events.forEach(event => { %>
       <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
-        <a class="cat-item rounded p-4" href="">
-          <i class="fa fa-3x fa-mail-bulk text-primary mb-4"></i>
-          <h6 class="mb-3">Marketing</h6>
-          <p class="mb-0">123 Vacancy</p>
-        </a>
+        <img style="width: 100%; height: 180px;" src="<%=event.image_url%>"
+        class="cat-item rounded p-1 alt="">
       </div>
-      <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+      <% }); %> <% } %>
+      <!-- <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
         <a class="cat-item rounded p-4" href="">
           <i class="fa fa-3x fa-headset text-primary mb-4"></i>
           <h6 class="mb-3">Customer Service</h6>
           <p class="mb-0">123 Vacancy</p>
         </a>
-      </div>
-      <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
+      </div> -->
+      <!-- <div class="col-lg-3 col-sm-6 wow fadeInUp" data-wow-delay="0.5s">
         <a class="cat-item rounded p-4" href="">
           <i class="fa fa-3x fa-user-tie text-primary mb-4"></i>
           <h6 class="mb-3">Human Resource</h6>
@@ -177,11 +100,37 @@
           <h6 class="mb-3">Design & Creative</h6>
           <p class="mb-0">123 Vacancy</p>
         </a>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
 <!-- Category End -->
+
+<!-- news Start -->
+<div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+  <div class="container">
+    <h1 class="text-center mb-5">Actualités</h1>
+    <div class="owl-carousel testimonial-carousel">
+      <% if (news.length > 0) { %> <% news.forEach(item => { %>
+      <div class="testimonial-item bg-light rounded p-4">
+        <img
+          class="img-fluid flex-shrink-0 rounded"
+          src="<%= item.imageUrl %>"
+          style="width: 50px; height: 50px"
+        />
+        <h5 class="mb-1"><%= item.title %></h5>
+        <p><%= item.description %></p>
+        <div class="d-flex align-items-center">
+          <div class="ps-3">
+            <small><%= item.date %></small>
+          </div>
+        </div>
+      </div>
+      <% }); %> <% } %>
+    </div>
+  </div>
+</div>
+<!-- news End -->
 
 <!-- Jobs Start -->
 <div class="container-xxl py-5">
@@ -351,45 +300,4 @@
 
   // Run the function when the page loads
   document.addEventListener("DOMContentLoaded", autoHideAlert);
-
-  // Function to fetch news and display it
-  //   async function fetchAndDisplayNews() {
-  //     try {
-  //       // Fetch the news data from the JSON file
-  //       const response = await fetch("/data/news.json");
-  //       const newsArray = await response.json();
-
-  //       // Get the container where news items will be inserted
-  //       const newsContainer = document.querySelector(".testimonial-carousel");
-
-  //       // Loop over the news items and build the HTML
-  //       newsArray.forEach((news) => {
-  //         const newsHTML = `
-  //           <div class="testimonial-item bg-light rounded p-4">
-  //             <i class="fa fa-quote-left fa-2x text-primary mb-3"></i>
-  //             <p>${news.text}</p>
-  //             <div class="d-flex align-items-center">
-  //               <img
-  //                 class="img-fluid flex-shrink-0 rounded"
-  //                 src="${news.image}"
-  //                 style="width: 50px; height: 50px"
-  //               />
-  //               <div class="ps-3">
-  //                 <h5 class="mb-1">${news.title}</h5>
-  //                 <small>${news.date}</small>
-  //               </div>
-  //             </div>
-  //           </div>
-  //         `;
-
-  //         // Insert the HTML into the container
-  //         newsContainer.insertAdjacentHTML("beforeend", newsHTML);
-  //       });
-  //     } catch (error) {
-  //       console.error("Error fetching news:", error);
-  //     }
-  //   }
-
-  //   // Call the function to fetch and display news when the page loads
-  //   document.addEventListener("DOMContentLoaded", fetchAndDisplayNews);
 </script>
